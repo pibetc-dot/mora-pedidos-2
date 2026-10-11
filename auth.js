@@ -44,20 +44,6 @@
     `;
   }
 
-  function openAdminLogin() {
-    if (typeof window.setModal === 'function') {
-      window.setModal('adminModal', true);
-    }
-
-    if (!readSession()) {
-      renderLocalLoginForm();
-      const adminContent = document.getElementById('adminContent');
-      if (adminContent) {
-        adminContent.innerHTML = '<div class="empty-state">Iniciá sesión para administrar Mora.</div>';
-      }
-    }
-  }
-
   function loginLocalAdmin() {
     const user = document.getElementById('adminEmail')?.value ?? '';
     const pass = document.getElementById('adminPassword')?.value ?? '';
@@ -70,12 +56,12 @@
         window.renderAdmin('business');
       }
 
-      if (typeof window.toast === 'function') {
-        window.toast('Sesión de admin activada ✓');
+      if (typeof window.setModal === 'function') {
+        window.setModal('adminModal', false);
       }
 
-      if (typeof window.setModal === 'function') {
-        window.setModal('adminModal', true);
+      if (typeof window.toast === 'function') {
+        window.toast('Sesión de admin activada ✓');
       }
 
       return true;
@@ -102,6 +88,20 @@
 
     if (typeof window.toast === 'function') {
       window.toast('Sesión cerrada');
+    }
+  }
+
+  function openAdminLogin() {
+    if (typeof window.setModal === 'function') {
+      window.setModal('adminModal', true);
+    }
+
+    if (!readSession()) {
+      renderLocalLoginForm();
+      const adminContent = document.getElementById('adminContent');
+      if (adminContent) {
+        adminContent.innerHTML = '<div class="empty-state">Iniciá sesión para administrar Mora.</div>';
+      }
     }
   }
 
