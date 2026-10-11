@@ -15,7 +15,6 @@
     <div class="brand-text"><strong>MORA</strong><span>HAMBURGUESAS · DESDE 2022</span></div>
   </a>
   <div class="header-actions">
-    <button id="adminBtn" class="icon-btn ghost" type="button" title="Editor" hidden>⚙️</button>
     <button id="cartBtn" class="cart-btn" type="button">🛒 <span>Carrito</span><b id="cartCount">0</b></button>
   </div>
 </header>
@@ -85,32 +84,10 @@
   </div>
 </div>
 
-<div id="adminModal" class="modal" aria-hidden="true">
-  <div class="modal-backdrop" data-close-admin></div>
-  <div class="modal-card admin-card" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
-    <button class="modal-close" data-close-admin type="button" aria-label="Cerrar">×</button>
-    <div class="modal-body">
-      <p class="eyebrow dark">EDITOR</p><h3 id="adminTitle">Configuración de Mora</h3>
-      <div id="adminAuth"></div>
-      <p class="admin-warning">Podés usar el editor en modo local. Si conectás Supabase, los cambios y pedidos se sincronizan entre tus dispositivos y el panel queda protegido por inicio de sesión.</p>
-      <div class="admin-tabs">
-        <button class="active" data-admin-tab="business">Negocio</button>
-        <button data-admin-tab="products">Productos</button>
-        <button data-admin-tab="zones">Delivery</button>
-        <button data-admin-tab="costs">Costos</button>
-        <button data-admin-tab="reports">Reportes</button>
-        <button data-admin-tab="orders">Pedidos</button>
-      </div>
-      <div id="adminContent"></div>
-    </div>
-  </div>
-</div>
-
 <div id="toast" class="toast" role="status"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="cloud.js"></script>
 <script src="app.js"></script>
-<script src="auth.js"></script>
 </body>
 </html>
