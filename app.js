@@ -1,5 +1,26 @@
 const STORAGE = { cart: 'moraCartV2', settings: 'moraSettingsV2', orders: 'moraOrdersV2' };
 
+const DEFAULT_INGREDIENTS = [
+  { id: 'pan', name: 'Pan', unit: 'u', price: 0 },
+  { id: 'carne', name: 'Carne', unit: 'g', price: 0 },
+  { id: 'queso', name: 'Queso', unit: 'g', price: 0 },
+  { id: 'cebolla', name: 'Cebolla', unit: 'g', price: 0 },
+  { id: 'ketchup', name: 'Ketchup', unit: 'g', price: 0 },
+  { id: 'papas', name: 'Papas', unit: 'u', price: 0 },
+  { id: 'salsa', name: 'Salsa', unit: 'g', price: 0 },
+  { id: 'servilleta', name: 'Servilleta', unit: 'u', price: 0 },
+  { id: 'bolsa', name: 'Bolsa', unit: 'u', price: 0 }
+];
+
+const DEFAULT_FIXED_COSTS = {
+  gas: 0,
+  aceite: 0,
+  delivery: 0,
+  empaques: 0,
+  alquiler: 0,
+  otros: 0
+};
+
 const DEFAULT_SETTINGS = {
   businessName: 'Mora Hamburguesas',
   whatsappNumber: '5491169347203',
@@ -12,13 +33,49 @@ const DEFAULT_SETTINGS = {
     { id: 'z2', name: 'Zona 2', price: 0 },
     { id: 'z3', name: 'Zona 3', price: 0 }
   ],
+  fixedCosts: deepCopy(DEFAULT_FIXED_COSTS),
+  ingredients: deepCopy(DEFAULT_INGREDIENTS),
   products: [
-    { id: 1, category: 'Hamburguesas', name: 'Mora Clásica', desc: 'Carne, lechuga, tomate y cebolla', price: 350, emoji: '🍔', image: '', extras: [] },
-    { id: 2, category: 'Hamburguesas', name: 'Mora Cheese', desc: 'Carne, cheddar, lechuga y tomate', price: 400, emoji: '🧀', image: '', extras: [] },
-    { id: 3, category: 'Hamburguesas', name: 'Mora Completa', desc: 'Carne, queso, panceta, huevo y lechuga', price: 450, emoji: '⭐', image: '', extras: [] },
-    { id: 4, category: 'Hamburguesas', name: 'Mora Bacon', desc: 'Carne, panceta crocante, queso y tomate', price: 420, emoji: '🥓', image: '', extras: [] },
-    { id: 5, category: 'Papas', name: 'Papas Mora', desc: 'Porción de papas fritas', price: 150, emoji: '🍟', image: '', extras: [] },
-    { id: 6, category: 'Bebidas', name: 'Bebida 500 ml', desc: 'Gaseosa o agua', price: 80, emoji: '🥤', image: '', extras: [] }
+    { id: 1, category: 'Hamburguesas', name: 'Mora Clásica', desc: 'Carne, lechuga, tomate y cebolla', price: 350, emoji: '🍔', image: '', extras: [], recipe: [
+      { name: 'Pan', qty: 1, unit: 'u' },
+      { name: 'Carne', qty: 120, unit: 'g' },
+      { name: 'Queso', qty: 0, unit: 'g' },
+      { name: 'Cebolla', qty: 30, unit: 'g' },
+      { name: 'Ketchup', qty: 15, unit: 'g' },
+      { name: 'Bolsa', qty: 1, unit: 'u' }
+    ] },
+    { id: 2, category: 'Hamburguesas', name: 'Mora Cheese', desc: 'Carne, cheddar, lechuga y tomate', price: 400, emoji: '🧀', image: '', extras: [], recipe: [
+      { name: 'Pan', qty: 1, unit: 'u' },
+      { name: 'Carne', qty: 140, unit: 'g' },
+      { name: 'Queso', qty: 60, unit: 'g' },
+      { name: 'Cebolla', qty: 30, unit: 'g' },
+      { name: 'Ketchup', qty: 15, unit: 'g' },
+      { name: 'Bolsa', qty: 1, unit: 'u' }
+    ] },
+    { id: 3, category: 'Hamburguesas', name: 'Mora Completa', desc: 'Carne, queso, panceta, huevo y lechuga', price: 450, emoji: '⭐', image: '', extras: [], recipe: [
+      { name: 'Pan', qty: 1, unit: 'u' },
+      { name: 'Carne', qty: 150, unit: 'g' },
+      { name: 'Queso', qty: 80, unit: 'g' },
+      { name: 'Cebolla', qty: 30, unit: 'g' },
+      { name: 'Ketchup', qty: 15, unit: 'g' },
+      { name: 'Bolsa', qty: 1, unit: 'u' }
+    ] },
+    { id: 4, category: 'Hamburguesas', name: 'Mora Bacon', desc: 'Carne, panceta crocante, queso y tomate', price: 420, emoji: '🥓', image: '', extras: [], recipe: [
+      { name: 'Pan', qty: 1, unit: 'u' },
+      { name: 'Carne', qty: 130, unit: 'g' },
+      { name: 'Queso', qty: 40, unit: 'g' },
+      { name: 'Cebolla', qty: 30, unit: 'g' },
+      { name: 'Ketchup', qty: 15, unit: 'g' },
+      { name: 'Bolsa', qty: 1, unit: 'u' }
+    ] },
+    { id: 5, category: 'Papas', name: 'Papas Mora', desc: 'Porción de papas fritas', price: 150, emoji: '🍟', image: '', extras: [], recipe: [
+      { name: 'Papas', qty: 1, unit: 'u' },
+      { name: 'Bolsa', qty: 1, unit: 'u' }
+    ] },
+    { id: 6, category: 'Bebidas', name: 'Bebida 500 ml', desc: 'Gaseosa o agua', price: 80, emoji: '🥤', image: '', extras: [], recipe: [
+      { name: 'Salsa', qty: 500, unit: 'ml' },
+      { name: 'Bolsa', qty: 1, unit: 'u' }
+    ] }
   ]
 };
 
@@ -29,31 +86,142 @@ let activeCategory = 'Todos';
 let adminSession = null;
 let cloudHydrated = false;
 
+function deepCopy(value) { return JSON.parse(JSON.stringify(value)); }
 function loadJSON(key, fallback) { try { const x = JSON.parse(localStorage.getItem(key)); return x ?? fallback; } catch { return fallback; } }
 function saveJSON(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
-async function saveSettingsEverywhere(){ saveJSON(STORAGE.settings,settings); if(window.MoraCloud?.isEnabled()){ try { await MoraCloud.saveSettings(settings); } catch(e){ console.error(e); toast('Error al guardar en la nube',true); } } }
-async function hydrateFromCloud(){ if(!window.MoraCloud?.isEnabled()) return; try { const remote=await MoraCloud.getSettings(); if(remote){ settings={...deepCopy(DEFAULT_SETTINGS),...remote,products:remote.products||deepCopy(DEFAULT_SETTINGS.products),deliveryZones:remote.deliveryZones||deepCopy(DEFAULT_SETTINGS.deliveryZones)}; } cloudHydrated=true; } catch(e){ console.error(e); } }
-async function cloudOrders(){ if(window.MoraCloud?.isEnabled() && adminSession){ try { return await MoraCloud.listOrders(); } catch(e){ console.error(e); } } return loadJSON(STORAGE.orders,[]).slice(0,50); }
-function deepCopy(x) { return JSON.parse(JSON.stringify(x)); }
+
+function normalizeSettings(raw) {
+  const base = deepCopy(DEFAULT_SETTINGS);
+  const merged = { ...base, ...(raw || {}) };
+  merged.fixedCosts = { ...base.fixedCosts, ...(raw && raw.fixedCosts ? raw.fixedCosts : {}) };
+  merged.ingredients = Array.isArray(raw && raw.ingredients) && raw.ingredients.length ? raw.ingredients : deepCopy(base.ingredients);
+  merged.products = Array.isArray(raw && raw.products) && raw.products.length ? raw.products.map(product => ({
+    ...product,
+    recipe: Array.isArray(product.recipe) ? product.recipe : []
+  })) : deepCopy(base.products);
+  return merged;
+}
+
 function loadSettings() {
   const saved = loadJSON(STORAGE.settings, null);
-  return saved ? { ...deepCopy(DEFAULT_SETTINGS), ...saved, products: saved.products || deepCopy(DEFAULT_SETTINGS.products), deliveryZones: saved.deliveryZones || deepCopy(DEFAULT_SETTINGS.deliveryZones) } : deepCopy(DEFAULT_SETTINGS);
+  return normalizeSettings(saved);
 }
+
 function money(n) { return `${settings.currency}${Number(n || 0).toLocaleString('es-AR')}`; }
 function esc(v) { return String(v ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;'); }
 function product(id) { return settings.products.find(p => Number(p.id) === Number(id)); }
 function categories() { return ['Todos', ...new Set(settings.products.map(p => p.category).filter(Boolean))]; }
 function cartCount() { return cart.reduce((s,i)=>s+i.qty,0); }
 function cartSubtotal() { return cart.reduce((s,i)=>s+i.unitPrice*i.qty,0); }
-function selectedDeliveryPrice() { if (document.getElementById('fulfillment')?.value !== 'delivery') return 0; const z = settings.deliveryZones.find(x=>x.id === document.getElementById('deliveryZone').value); return z?.price ?? 0; }
+function totalFixedCosts() { const fixed = settings.fixedCosts || DEFAULT_FIXED_COSTS; return Object.values(fixed).reduce((sum, value) => sum + Number(value || 0), 0); }
+
+function selectedDeliveryPrice() {
+  if (document.getElementById('fulfillment')?.value !== 'delivery') return 0;
+  const z = settings.deliveryZones.find(x => x.id === document.getElementById('deliveryZone').value);
+  return z?.price ?? 0;
+}
 function total() { return cartSubtotal() + selectedDeliveryPrice(); }
 
-function renderCategories() {
-  document.getElementById('categoryTabs').innerHTML = categories().map(c=>`<button class="category-tab ${c===activeCategory?'active':''}" data-category="${esc(c)}" type="button">${esc(c)}</button>`).join('');
+function ingredientLookup(name) {
+  const clean = String(name || '').trim().toLowerCase();
+  return settings.ingredients.find(ingredient => String(ingredient.name || '').trim().toLowerCase() === clean) || null;
 }
+
+function convertQty(value, fromUnit, toUnit) {
+  const qty = Number(value || 0);
+  const conversions = {
+    'kg': { 'g': 1000, 'ml': 1000, 'l': 1 },
+    'g': { 'kg': 1 / 1000, 'mg': 1000, 'ml': 1 },
+    'l': { 'ml': 1000, 'kg': 1 },
+    'ml': { 'l': 1 / 1000, 'kg': 1 },
+    'u': { 'u': 1 },
+    'pack': { 'u': 1 }
+  };
+  if (fromUnit === toUnit) return qty;
+  const factors = conversions[fromUnit] || {};
+  const factor = factors[toUnit];
+  if (!factor) return qty;
+  return qty * factor;
+}
+
+function calculateIngredientCost(recipeItem) {
+  if (!recipeItem) return 0;
+  const ingredient = ingredientLookup(recipeItem.name || recipeItem.ingredient || '');
+  if (!ingredient) return 0;
+  const qty = Number(recipeItem.qty || 0);
+  const fromUnit = (recipeItem.unit || ingredient.unit || 'u');
+  const toUnit = ingredient.unit || fromUnit;
+  const normalizedQty = convertQty(qty, fromUnit, toUnit);
+  const basePrice = Number(ingredient.price || 0);
+  return normalizedQty * basePrice;
+}
+
+function calculateProductCost(product) {
+  if (!product) return 0;
+  const list = Array.isArray(product.recipe) ? product.recipe : [];
+  const total = list.reduce((sum, item) => sum + calculateIngredientCost(item), 0);
+  return Number(total.toFixed(2));
+}
+
+function cartCost() {
+  return cart.reduce((sum, item) => {
+    const p = product(item.id);
+    const unitCost = calculateProductCost(p);
+    return sum + (unitCost * Number(item.qty || 1));
+  }, 0);
+}
+
+function buildOrderMeta(order) {
+  const revenue = Number(order.total || 0);
+  const cost = Number(order.cost || 0);
+  const profit = revenue - cost;
+  return { revenue, cost, profit };
+}
+
+async function saveSettingsEverywhere() {
+  saveJSON(STORAGE.settings, settings);
+  if (window.MoraCloud?.isEnabled()) {
+    try {
+      await MoraCloud.saveSettings(settings);
+    } catch (e) {
+      console.error(e);
+      toast('Error al guardar en la nube', true);
+    }
+  }
+}
+
+async function hydrateFromCloud() {
+  if (!window.MoraCloud?.isEnabled()) return;
+  try {
+    const remote = await MoraCloud.getSettings();
+    if (remote) {
+      settings = normalizeSettings(remote);
+      saveJSON(STORAGE.settings, settings);
+    }
+    cloudHydrated = true;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function cloudOrders() {
+  if (window.MoraCloud?.isEnabled() && adminSession) {
+    try {
+      return await MoraCloud.listOrders();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  return loadJSON(STORAGE.orders, []).slice(0, 50);
+}
+
+function renderCategories() {
+  document.getElementById('categoryTabs').innerHTML = categories().map(c => `<button class="category-tab ${c === activeCategory ? 'active' : ''}" data-category="${esc(c)}" type="button">${esc(c)}</button>`).join('');
+}
+
 function renderMenu() {
-  const list = settings.products.filter(p=>activeCategory==='Todos' || p.category===activeCategory);
-  document.getElementById('menu').innerHTML = list.length ? list.map(p=>`
+  const list = settings.products.filter(p => activeCategory === 'Todos' || p.category === activeCategory);
+  document.getElementById('menu').innerHTML = list.length ? list.map(p => `
     <article class="product-card">
       <button class="product-open" data-product="${p.id}" type="button">
         <div class="product-image">${p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">` : `<span>${esc(p.emoji || '🍔')}</span>`}</div>
@@ -62,23 +230,39 @@ function renderMenu() {
       <button class="quick-add" data-quick-add="${p.id}" type="button">+ Agregar</button>
     </article>`).join('') : '<div class="empty-state">Todavía no hay productos en esta categoría.</div>';
 }
+
 function renderFormOptions() {
   const fulfillment = document.getElementById('fulfillment');
   fulfillment.innerHTML = `<option value="pickup">${esc(settings.pickupLabel)}</option><option value="delivery">${esc(settings.deliveryLabel)}</option>`;
-  const payment = document.getElementById('payment'); payment.innerHTML = settings.paymentMethods.map(p=>`<option>${esc(p)}</option>`).join('');
-  const zones = document.getElementById('deliveryZone'); zones.innerHTML = settings.deliveryZones.map(z=>`<option value="${esc(z.id)}">${esc(z.name)}${z.price ? ` — ${money(z.price)}` : ''}</option>`).join('');
+  const payment = document.getElementById('payment'); payment.innerHTML = settings.paymentMethods.map(p => `<option>${esc(p)}</option>`).join('');
+  const zones = document.getElementById('deliveryZone'); zones.innerHTML = settings.deliveryZones.map(z => `<option value="${esc(z.id)}">${esc(z.name)}${z.price ? ` — ${money(z.price)}` : ''}</option>`).join('');
   updateDeliveryVisibility();
 }
+
 function renderCart() {
   document.getElementById('cartCount').textContent = cartCount();
   const box = document.getElementById('cart');
   if (!cart.length) box.innerHTML = '<div class="empty-cart">Tu carrito está vacío.<br><span>Elegí algo del menú y aparece acá 🍔</span></div>';
-  else box.innerHTML = cart.map(i=>`<div class="cart-row"><div class="cart-main"><strong>${esc(i.name)}</strong><small>${money(i.unitPrice)} c/u${i.extras?.length ? ` · ${esc(i.extras.map(x=>x.name).join(', '))}` : ''}</small></div><div class="cart-qty"><button data-change="-1" data-key="${esc(i.key)}" type="button">−</button><span>${i.qty}</span><button data-change="1" data-key="${esc(i.key)}" type="button">+</button></div><button data-remove="${esc(i.key)}" type="button">🗑</button></div>`).join('');
-  document.getElementById('summary').innerHTML = `<div><span>Productos</span><strong>${money(cartSubtotal())}</strong></div>${document.getElementById('fulfillment').value==='delivery'?`<div><span>Envío</span><strong>${selectedDeliveryPrice()?money(selectedDeliveryPrice()):'Gratis'}</strong></div>`:''}<div class="summary-total"><span>Total</span><strong>${money(total())}</strong></div>`;
+  else box.innerHTML = cart.map(i => `
+    <div class="cart-row">
+      <div class="cart-main"><strong>${esc(i.name)}</strong><small>${money(i.unitPrice)} c/u${i.extras?.length ? ` · ${esc(i.extras.map(x => x.name).join(', '))}` : ''}</small></div>
+      <div class="cart-qty"><button data-change="-1" data-key="${esc(i.key)}" type="button">−</button><span>${i.qty}</span><button data-change="1" data-key="${esc(i.key)}" type="button">+</button></div>
+      <button data-remove="${esc(i.key)}" type="button">🗑</button>
+    </div>`).join('');
+
+  document.getElementById('summary').innerHTML = `
+    <div><span>Productos</span><strong>${money(cartSubtotal())}</strong></div>
+    ${document.getElementById('fulfillment').value === 'delivery' ? `<div><span>Envío</span><strong>${selectedDeliveryPrice() ? money(selectedDeliveryPrice()) : 'Gratis'}</strong></div>` : ''}
+    <div class="summary-total"><span>Total</span><strong>${money(total())}</strong></div>
+  `;
   document.getElementById('whatsapp').disabled = !cart.length;
   document.getElementById('clearCartBtn').hidden = !cart.length;
 }
-function updateDeliveryVisibility() { document.getElementById('deliveryFields').hidden = document.getElementById('fulfillment').value !== 'delivery'; renderCart(); }
+
+function updateDeliveryVisibility() {
+  document.getElementById('deliveryFields').hidden = document.getElementById('fulfillment').value !== 'delivery';
+  renderCart();
+}
 
 function openProduct(id) {
   selectedProduct = product(id); if (!selectedProduct) return;
@@ -87,109 +271,527 @@ function openProduct(id) {
   document.getElementById('modalDesc').textContent = selectedProduct.desc;
   document.getElementById('modalImage').innerHTML = selectedProduct.image ? `<img src="${esc(selectedProduct.image)}" alt="${esc(selectedProduct.name)}">` : esc(selectedProduct.emoji || '🍔');
   document.getElementById('modalPrice').textContent = money(selectedProduct.price);
+
   const options = selectedProduct.extras || [];
-  document.getElementById('modalOptions').innerHTML = options.length ? `<div class="option-title">Extras</div>${options.map((x,i)=>`<label class="check-option"><input type="checkbox" data-extra-index="${i}"><span>${esc(x.name)}</span><small>+${money(x.price)}</small></label>`).join('')}` : '';
+  document.getElementById('modalOptions').innerHTML = options.length ? `<div class="option-title">Extras</div>${options.map((x, i) => `<label class="check-option"><input type="checkbox" data-extra-index="${i}"><span>${esc(x.name)}</span><small>+${money(x.price)}</small></label>`).join('')}` : '';
   setModal('productModal', true);
 }
-function setModal(id, open) { const m=document.getElementById(id); m.classList.toggle('open',open); m.setAttribute('aria-hidden',String(!open)); document.body.classList.toggle('modal-open',open); }
-function addProduct(id, extras=[]) {
-  const p=product(id); if(!p) return;
-  const extraTotal=extras.reduce((s,x)=>s+Number(x.price||0),0); const key=`${p.id}|${extras.map(x=>x.name).sort().join(',')}`;
-  const existing=cart.find(x=>x.key===key);
-  if(existing) existing.qty++; else cart.push({key,id:p.id,name:p.name,unitPrice:Number(p.price)+extraTotal,qty:1,extras});
-  saveJSON(STORAGE.cart,cart); renderCart(); toast('Agregado al pedido ✓');
+
+function setModal(id, open) {
+  const m = document.getElementById(id);
+  if (!m) return;
+  m.classList.toggle('open', open);
+  m.setAttribute('aria-hidden', String(!open));
+  document.body.classList.toggle('modal-open', open);
 }
+
+function addProduct(id, extras = []) {
+  const p = product(id); if (!p) return;
+  const extraTotal = extras.reduce((s, x) => s + Number(x.price || 0), 0);
+  const key = `${p.id}|${extras.map(x => x.name).sort().join(',')}`;
+  const existing = cart.find(x => x.key === key);
+  if (existing) existing.qty++; else cart.push({ key, id: p.id, name: p.name, unitPrice: Number(p.price) + extraTotal, qty: 1, extras });
+  saveJSON(STORAGE.cart, cart);
+  renderCart();
+  toast('Agregado al pedido ✓');
+}
+
 function buildMessage() {
-  const name=document.getElementById('name').value.trim(), phone=document.getElementById('phone').value.trim();
-  const delivery=document.getElementById('fulfillment').value==='delivery'; const address=document.getElementById('address').value.trim();
-  const zone=settings.deliveryZones.find(z=>z.id===document.getElementById('deliveryZone').value); const payment=document.getElementById('payment').value; const notes=document.getElementById('notes').value.trim();
-  const orderId=`MORA-${String(Date.now()).slice(-6)}`;
-  let m=`🍔 *${settings.businessName.toUpperCase()}*\n*PEDIDO ${orderId}*\n\n`;
-  m+=`*Cliente:* ${name}\n*WhatsApp:* ${phone}\n*Entrega:* ${delivery ? `Delivery — ${zone?.name || ''}` : settings.pickupLabel}\n`;
-  if(delivery) m+=`*Dirección:* ${address}\n`;
-  m+=`*Pago:* ${payment}\n\n*PRODUCTOS:*\n`;
-  cart.forEach(i=>{m+=`• ${i.name} x${i.qty} — ${money(i.unitPrice*i.qty)}\n`; if(i.extras?.length)m+=`  Extras: ${i.extras.map(x=>x.name).join(', ')}\n`;});
-  m+=`\n*Subtotal:* ${money(cartSubtotal())}\n*Delivery:* ${delivery?(selectedDeliveryPrice()?money(selectedDeliveryPrice()):'Gratis'):'—'}\n*TOTAL: ${money(total())}*`;
-  if(notes)m+=`\n\n*Notas:* ${notes}`;
-  return {message:m,orderId};
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const delivery = document.getElementById('fulfillment').value === 'delivery';
+  const address = document.getElementById('address').value.trim();
+  const zone = settings.deliveryZones.find(z => z.id === document.getElementById('deliveryZone').value);
+  const payment = document.getElementById('payment').value;
+  const notes = document.getElementById('notes').value.trim();
+  const orderId = `MORA-${String(Date.now()).slice(-6)}`;
+
+  let m = `🍔 *${settings.businessName.toUpperCase()}*\n*PEDIDO ${orderId}*\n\n`;
+  m += `*Cliente:* ${name}\n*WhatsApp:* ${phone}\n*Entrega:* ${delivery ? `Delivery — ${zone?.name || ''}` : settings.pickupLabel}\n`;
+  if (delivery) m += `*Dirección:* ${address}\n`;
+  m += `*Pago:* ${payment}\n\n*PRODUCTOS:*\n`;
+  cart.forEach(i => {
+    m += `• ${i.name} x${i.qty} — ${money(i.unitPrice * i.qty)}\n`;
+    if (i.extras?.length) m += `  Extras: ${i.extras.map(x => x.name).join(', ')}\n`;
+  });
+  m += `\n*Subtotal:* ${money(cartSubtotal())}\n*Delivery:* ${delivery ? (selectedDeliveryPrice() ? money(selectedDeliveryPrice()) : 'Gratis') : '—'}\n*TOTAL: ${money(total())}*`;
+  if (notes) m += `\n\n*Notas:* ${notes}`;
+
+  return { message: m, orderId };
 }
+
 function validate() {
-  if(!cart.length) return 'Agregá al menos un producto.';
-  if(!document.getElementById('name').value.trim()) return 'Completá tu nombre.';
-  const ph=document.getElementById('phone').value.replace(/\D/g,''); if(ph.length<8) return 'Revisá tu número de WhatsApp.';
-  if(document.getElementById('fulfillment').value==='delivery' && !document.getElementById('address').value.trim()) return 'Completá la dirección de entrega.';
-  const wa=String(settings.whatsappNumber).replace(/\D/g,''); if(wa.length<10) return 'Falta configurar el WhatsApp de Mora.';
+  if (!cart.length) return 'Agregá al menos un producto.';
+  if (!document.getElementById('name').value.trim()) return 'Completá tu nombre.';
+  const ph = document.getElementById('phone').value.replace(/\D/g, '');
+  if (ph.length < 8) return 'Revisá tu número de WhatsApp.';
+  if (document.getElementById('fulfillment').value === 'delivery' && !document.getElementById('address').value.trim()) return 'Completá la dirección de entrega.';
+  const wa = String(settings.whatsappNumber).replace(/\D/g, '');
+  if (wa.length < 10) return 'Falta configurar el WhatsApp de Mora.';
   return '';
 }
-async function sendOrder() {
-  const error=validate(); if(error){toast(error,true); return;}
-  const {message,orderId}=buildMessage();
-  const order={id:orderId,createdAt:new Date().toISOString(),message,total:total(),products:deepCopy(cart),customer:{name:document.getElementById('name').value.trim(),phone:document.getElementById('phone').value.trim(),address:document.getElementById('address').value.trim(),fulfillment:document.getElementById('fulfillment').value}};
-  const orders=loadJSON(STORAGE.orders,[]); orders.push(order); saveJSON(STORAGE.orders,orders);
-  if(window.MoraCloud?.isEnabled()){ try { await MoraCloud.createOrder(order); } catch(e){ console.error(e); toast('Pedido guardado localmente; no se pudo sincronizar.',true); } }
-  window.open(`https://wa.me/${String(settings.whatsappNumber).replace(/\D/g,'')}?text=${encodeURIComponent(message)}`,'_blank','noopener,noreferrer');
-  toast('Pedido preparado en WhatsApp ✓');
-}
-function toast(msg,error=false){const t=document.getElementById('toast'); t.textContent=msg; t.className=`toast show ${error?'error':''}`; clearTimeout(window.__toast); window.__toast=setTimeout(()=>t.className='',3500); }
 
-async function adminOpen(tab='business'){
-  setModal('adminModal',true);
-  if(window.MoraCloud?.isEnabled()){
-    adminSession=await MoraCloud.session();
-    renderAdminAuth();
-    if(!adminSession){ renderAdmin('login'); return; }
-  }
-  renderAdmin(tab);
-}
-function renderAdminAuth(){
-  const a=document.getElementById('adminAuth');
-  if(!window.MoraCloud?.isEnabled()){ 
-    a.innerHTML='<div class="admin-hint">Modo local: los cambios solo afectan este navegador.</div>';
-    return;
-  }
-  if(adminSession){ a.innerHTML='<div class="admin-auth-bar"><span>☁️ Panel online conectado</span><button class="mini" id="adminLogout">Cerrar sesión</button></div>'; }
-  else { a.innerHTML='<div class="admin-form"><label>Email<input id="adminEmail" type="email" autocomplete="username" placeholder="tu@email.com"></label><label>Contraseña<input id="adminPassword" type="password" autocomplete="current-password" placeholder="contraseña"></label><button class="btn btn-primary" id="adminLogin" type="button">Iniciar sesión</button></div>'; }
-}
-function renderAdmin(tab='business') {
-  renderAdminAuth();
-  if(window.MoraCloud?.isEnabled() && !adminSession) { if(tab!=='login') return; return; }
-  document.querySelectorAll('[data-admin-tab]').forEach(b=>b.classList.toggle('active',b.dataset.adminTab===tab)); const c=document.getElementById('adminContent');
-  if(tab==='business') c.innerHTML=`<div class="admin-form"><label>Nombre del negocio<input id="aName" value="${esc(settings.businessName)}"></label><label>WhatsApp de pedidos<input id="aWhatsApp" value="${esc(settings.whatsappNumber)}" placeholder="54 9 11 1234 5678"></label><button class="btn btn-primary" id="saveBusiness" type="button">Guardar cambios</button></div>`;
-  if(tab==='products') c.innerHTML=`<div class="admin-toolbar"><button class="btn btn-outline" id="addProduct">+ Nuevo producto</button><button class="btn btn-outline" id="exportConfig">Exportar config</button></div>${settings.products.map(p=>`<div class="admin-product"><div><strong>${esc(p.name)}</strong><small>${esc(p.category)} · ${money(p.price)}</small></div><div><button class="mini" data-edit-product="${p.id}">✏️</button><button class="mini" data-delete-product="${p.id}">🗑</button></div></div>`).join('')}`;
-  if(tab==='zones') c.innerHTML=`<div class="admin-form"><p class="admin-hint">Configurá el costo de cada zona. Si el precio es 0, aparecerá como gratis.</p>${settings.deliveryZones.map((z,i)=>`<div class="admin-zone"><label>${esc(z.name)}<input type="number" data-zone-name="${i}" value="${z.price}" min="0" step="50"></label></div>`).join('')}<button class="btn btn-outline" id="addZone">+ Nueva zona</button><button class="btn btn-primary" id="saveZones" type="button">Guardar</button></div>`;
-  if(tab==='orders'){ c.innerHTML='<div class="empty-state">Cargando pedidos…</div>'; cloudOrders().then(orders=>{ const rows=orders.map(o=>'<div class="admin-order"><strong>'+esc(o.order_number||o.id)+'</strong><small>'+new Date(o.created_at).toLocaleString('es-AR')+'</small><div>'+esc(o.customer?.name||'Cliente')+' · '+money(o.total)+'</div></div>').join(''); c.innerHTML=rows || '<div class="empty-state">Sin pedidos aún.</div>'; }); }
-}
-function editProduct(id){const p=product(id); if(!p)return; const name=prompt('Nombre del producto',p.name); if(name===null)return; const price=Number(prompt('Precio',p.price)); if(!Number.isFinite(price))return; const desc=prompt('Descripción',p.desc); if(desc===null)return; const emoji=prompt('Emoji o URL',p.image||p.emoji); p.name=name; p.price=price; p.desc=desc; p.emoji=emoji; p.image=''; saveSettingsEverywhere(); renderCategories(); renderMenu(); renderAdmin('products'); }
-function addNewProduct(){const name=prompt('Nombre del producto');if(!name)return;const price=Number(prompt('Precio',0));if(!Number.isFinite(price))return;const category=prompt('Categoría','Hamburguesas');if(!category)return;const desc=prompt('Descripción');if(!desc)return;const emoji=prompt('Emoji');settings.products.push({id:Date.now(),category,name,desc,price,emoji,image:'',extras:[]});saveSettingsEverywhere();renderCategories();renderMenu();renderAdmin('products');}
-function exportConfig(){const blob=new Blob([JSON.stringify(settings,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mora-config.json';a.click();}
+function buildOrderRecord() {
+  const { message, orderId } = buildMessage();
+  const orderTotal = total();
+  const orderCost = cart.reduce((sum, item) => {
+    const p = product(item.id);
+    const base = calculateProductCost(p) * Number(item.qty || 1);
+    return sum + Number(base || 0);
+  }, 0);
 
-function wire(){
-  document.getElementById('menuCta').onclick=()=>document.getElementById('menuSection').scrollIntoView({behavior:'smooth'});
-  document.getElementById('cartBtn').onclick=()=>document.getElementById('checkout').scrollIntoView({behavior:'smooth'});
-  document.getElementById('adminBtn').onclick=()=>adminOpen();
-  document.getElementById('whatsapp').onclick=sendOrder;
-  document.getElementById('clearCartBtn').onclick=()=>{if(confirm('¿Vaciar el carrito?')){cart=[];saveJSON(STORAGE.cart,cart);renderCart();}};
-  document.getElementById('fulfillment').onchange=updateDeliveryVisibility;
-  document.getElementById('deliveryZone').onchange=renderCart;
-  document.getElementById('categoryTabs').onclick=e=>{const b=e.target.closest('[data-category]');if(b){activeCategory=b.dataset.category;renderCategories();renderMenu();}};
-  document.getElementById('menu').onclick=e=>{const q=e.target.closest('[data-quick-add]'), p=e.target.closest('[data-product]');if(q){addProduct(Number(q.dataset.quickAdd));}else if(p){openProduct(Number(p.dataset.product));}};
-  document.getElementById('cart').onclick=e=>{const c=e.target.closest('[data-change]'),r=e.target.closest('[data-remove]');if(c){const i=cart.find(x=>x.key===c.dataset.key);if(i){i.qty+=Number(c.dataset.change);if(i.qty<=0)cart=cart.filter(x=>x.key!==c.dataset.key);saveJSON(STORAGE.cart,cart);renderCart();}}if(r){cart=cart.filter(x=>x.key!==r.dataset.remove);saveJSON(STORAGE.cart,cart);renderCart();}};
-  document.getElementById('modalAdd').onclick=()=>{const extras=[...document.querySelectorAll('#modalOptions input:checked')].map(x=>selectedProduct.extras[Number(x.dataset.extraIndex)]);addProduct(selectedProduct.id,extras);setModal('productModal',false);};
-  document.querySelectorAll('[data-close-modal]').forEach(x=>x.onclick=()=>setModal('productModal',false)); document.querySelectorAll('[data-close-admin]').forEach(x=>x.onclick=()=>setModal('adminModal',false));
-  document.querySelector('.admin-tabs').onclick=e=>{const b=e.target.closest('[data-admin-tab]');if(b)renderAdmin(b.dataset.adminTab);};
-  document.getElementById('adminContent').onclick=async e=>{
-    if(e.target.id==='adminLogin'){ try { adminSession=await MoraCloud.signIn(document.getElementById('adminEmail').value.trim(),document.getElementById('adminPassword').value); renderAdminAuth(); renderAdmin('business'); } catch(e){ toast(String(e?.message||e),true); } return; }
-    if(e.target.id==='adminLogout'){ await MoraCloud.signOut(); adminSession=null; renderAdminAuth(); renderAdmin('login'); toast('Sesión cerrada'); return; }
-    if(e.target.id==='refreshOrders'){ renderAdmin('orders'); return; }
-    if(e.target.id==='saveBusiness'){settings.businessName=document.getElementById('aName').value.trim()||settings.businessName;settings.whatsappNumber=document.getElementById('aWhatsApp').value.trim()||settings.whatsappNumber;saveSettingsEverywhere();toast('Negocio actualizado ✓');renderAdmin('business');}
-    if(e.target.id==='addProduct')addNewProduct(); if(e.target.id==='exportConfig')exportConfig();
-    if(e.target.dataset.editProduct)editProduct(Number(e.target.dataset.editProduct));
-    if(e.target.dataset.deleteProduct){settings.products=settings.products.filter(p=>p.id!==Number(e.target.dataset.deleteProduct));saveSettingsEverywhere();renderCategories();renderMenu();renderAdmin('products');}
-    if(e.target.id==='addZone'){settings.deliveryZones.push({id:'z'+Date.now(),name:'Nueva zona',price:0});renderAdmin('zones');}
-    if(e.target.id==='saveZones'){settings.deliveryZones=settings.deliveryZones.map((z,i)=>({...z,name:document.querySelector(`[data-zone-name="${i}"]`).value.trim()||z.name,price:Number(document.querySelector(`[data-zone-name="${i}"]`).value)||0}));saveSettingsEverywhere();renderAdmin('zones');}
-    if(e.target.dataset.deleteZone){settings.deliveryZones.splice(Number(e.target.dataset.deleteZone),1);renderAdmin('zones');}
-    if(e.target.id==='clearOrders'){if(confirm('¿Borrar todo el historial local?')){localStorage.removeItem(STORAGE.orders);renderAdmin('orders');}}
+  return {
+    id: orderId,
+    createdAt: new Date().toISOString(),
+    message,
+    total: orderTotal,
+    cost: orderCost,
+    gain: orderTotal - orderCost,
+    products: deepCopy(cart),
+    customer: {
+      name: document.getElementById('name').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      fulfillment: document.getElementById('fulfillment').value,
+      payment: document.getElementById('payment').value,
+      notes: document.getElementById('notes').value.trim()
+    }
   };
 }
 
-document.addEventListener('DOMContentLoaded',async()=>{document.title=`${settings.businessName} — Pedidos Online`;wire();renderCategories();renderMenu();renderFormOptions();renderCart(); await hydrateFromCloud(); });
+async function sendOrder() {
+  const error = validate(); if (error) { toast(error, true); return; }
+  const order = buildOrderRecord();
+  const orders = loadJSON(STORAGE.orders, []);
+  orders.push(order);
+  saveJSON(STORAGE.orders, orders);
+
+  if (window.MoraCloud?.isEnabled()) {
+    try { await MoraCloud.createOrder(order); } catch (e) { console.error(e); toast('Pedido guardado localmente; no se pudo sincronizar.', true); }
+  }
+
+  window.open(`https://wa.me/${String(settings.whatsappNumber).replace(/\D/g, '')}?text=${encodeURIComponent(order.message)}`, '_blank', 'noopener,noreferrer');
+  toast('Pedido preparado en WhatsApp ✓');
+}
+
+function toast(msg, error = false) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = `toast show ${error ? 'error' : ''}`;
+  clearTimeout(window.__toast);
+  window.__toast = setTimeout(() => t.className = '', 3500);
+}
+
+async function adminOpen(tab = 'business') {
+  setModal('adminModal', true);
+  if (window.MoraCloud?.isEnabled()) {
+    adminSession = await MoraCloud.session();
+    renderAdminAuth();
+    if (!adminSession) { renderAdmin('login'); return; }
+  }
+  renderAdmin(tab);
+}
+
+function renderAdminAuth() {
+  const a = document.getElementById('adminAuth');
+  if (!a) return;
+  if (!window.MoraCloud?.isEnabled()) {
+    a.innerHTML = '<div class="admin-hint">Modo local: los cambios solo afectan este navegador.</div>';
+    return;
+  }
+  if (adminSession) a.innerHTML = '<div class="admin-auth-bar"><span>☁️ Panel online conectado</span><button class="mini" id="adminLogout">Cerrar sesión</button></div>';
+  else a.innerHTML = '<div class="admin-form"><label>Email<input id="adminEmail" type="email" autocomplete="username" placeholder="tu@email.com"></label><label>Contraseña<input id="adminPassword" type="password" autocomplete="current-password" placeholder="contraseña"></label><button class="btn btn-primary" id="adminLogin" type="button">Iniciar sesión</button></div>';
+}
+
+function renderCostTab() {
+  const container = document.getElementById('adminContent');
+  if (!container) return;
+
+  const ingredientRows = (settings.ingredients || []).map((ingredient, index) => `
+    <div class="admin-zone">
+      <label>
+        ${esc(ingredient.name)}
+        <input type="text" data-ingredient-name="${index}" value="${esc(ingredient.name)}" placeholder="Nombre">
+      </label>
+      <label>
+        Unidad
+        <input type="text" data-ingredient-unit="${index}" value="${esc(ingredient.unit)}" placeholder="u / g / kg / ml">
+      </label>
+      <label>
+        Costo unitario
+        <input type="number" data-ingredient-price="${index}" value="${Number(ingredient.price || 0)}" min="0" step="0.01">
+      </label>
+    </div>
+  `).join('');
+
+  const fixedRows = Object.entries(settings.fixedCosts || DEFAULT_FIXED_COSTS).map(([key, value]) => `
+    <div class="admin-zone">
+      <label>
+        ${esc(key)}
+        <input type="number" data-fixed-key="${key}" value="${Number(value || 0)}" min="0" step="0.01">
+      </label>
+    </div>
+  `).join('');
+
+  container.innerHTML = `
+    <div class="admin-form">
+      <h4>Insumos</h4>
+      ${ingredientRows || '<div class="empty-state">Sin insumos cargados.</div>'}
+      <button class="btn btn-outline" id="addIngredient" type="button">+ Añadir insumo</button>
+      <button class="btn btn-primary" id="saveCosts" type="button">Guardar costos</button>
+    </div>
+    <div class="admin-form">
+      <h4>Gastos fijos</h4>
+      ${fixedRows}
+    </div>
+  `;
+}
+
+function renderReportTab() {
+  const container = document.getElementById('adminContent');
+  if (!container) return;
+
+  const orders = loadJSON(STORAGE.orders, []);
+  const revenue = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const cost = orders.reduce((sum, order) => sum + Number(order.cost || 0), 0);
+  const gain = revenue - cost;
+  const average = orders.length ? revenue / orders.length : 0;
+
+  const rows = orders.slice().reverse().map(order => `
+    <div class="admin-order">
+      <strong>${esc(order.id || 'Pedido')}</strong>
+      <small>${new Date(order.createdAt).toLocaleString('es-AR')}</small>
+      <div>${esc(order.customer?.name || '')} · ${money(order.total || 0)}</div>
+      <div>Costo: ${money(order.cost || 0)} · Ganancia: ${money(order.gain || 0)}</div>
+    </div>
+  `).join('') || '<div class="empty-state">Aún no tenés pedidos registrados.</div>';
+
+  container.innerHTML = `
+    <div class="admin-form">
+      <div class="summary-boxes">
+        <div><span>Pedidos</span><strong>${orders.length}</strong></div>
+        <div><span>Venta total</span><strong>${money(revenue)}</strong></div>
+        <div><span>Costo total</span><strong>${money(cost)}</strong></div>
+        <div><span>Ganancia</span><strong>${money(gain)}</strong></div>
+        <div><span>Promedio</span><strong>${money(average)}</strong></div>
+      </div>
+      <button class="btn btn-outline" id="exportCsv" type="button">Exportar CSV para Google Sheets</button>
+    </div>
+    <div class="admin-form">
+      <h4>Historial</h4>
+      ${rows}
+    </div>
+  `;
+}
+
+function renderAdmin(tab = 'business') {
+  const c = document.getElementById('adminContent');
+  if (!c) return;
+
+  document.querySelectorAll('[data-admin-tab]').forEach(b => b.classList.toggle('active', b.dataset.adminTab === tab));
+
+  if (tab === 'business') {
+    renderAdminAuth();
+    c.innerHTML = `<div class="admin-form"><label>Nombre del negocio<input id="aName" value="${esc(settings.businessName)}"></label><label>WhatsApp de pedidos<input id="aWhatsApp" value="${esc(settings.whatsappNumber)}" placeholder="54 9 11 1234 5678"></label><button class="btn btn-primary" id="saveBusiness" type="button">Guardar cambios</button></div>`;
+  }
+
+  if (tab === 'products') {
+    renderAdminAuth();
+    c.innerHTML = `<div class="admin-toolbar"><button class="btn btn-outline" id="addProduct">+ Nuevo producto</button><button class="btn btn-outline" id="exportConfig">Exportar config</button></div>${settings.products.map(p => `<div class="admin-product"><div><strong>${esc(p.name)}</strong><small>${esc(p.category)} · ${money(p.price)}</small></div><div><button class="mini" data-edit-product="${p.id}">✏️</button><button class="mini" data-delete-product="${p.id}">🗑</button></div></div>`).join('')}`;
+  }
+
+  if (tab === 'zones') {
+    renderAdminAuth();
+    c.innerHTML = `<div class="admin-form"><p class="admin-hint">Configurá el costo de cada zona. Si el precio es 0, aparecerá como gratis.</p>${settings.deliveryZones.map((z, i) => `<div class="admin-zone"><label>${esc(z.name)}<input type="number" data-zone-name="${i}" value="${z.price}" min="0" step="50"></label></div>`).join('')}<button class="btn btn-outline" id="addZone">+ Nueva zona</button><button class="btn btn-primary" id="saveZones" type="button">Guardar</button></div>`;
+  }
+
+  if (tab === 'orders') {
+    renderAdminAuth();
+    c.innerHTML = '<div class="empty-state">Cargando pedidos…</div>';
+    cloudOrders().then(orders => {
+      const rows = (orders || []).map(o => `
+        <div class="admin-order">
+          <strong>${esc(o.order_number || o.id || 'Pedido')}</strong>
+          <small>${new Date(o.created_at || o.createdAt).toLocaleString('es-AR')}</small>
+          <div>${esc(o.customer?.name || 'Cliente')} · ${money(o.total || 0)}</div>
+        </div>
+      `).join('');
+      c.innerHTML = rows || '<div class="empty-state">Sin pedidos aún.</div>';
+    });
+  }
+
+  if (tab === 'costs') {
+    renderCostTab();
+  }
+
+  if (tab === 'reports') {
+    renderReportTab();
+  }
+}
+
+function editProduct(id) {
+  const p = product(id); if (!p) return;
+  const name = prompt('Nombre del producto', p.name); if (name === null) return;
+  const price = Number(prompt('Precio', p.price)); if (!Number.isFinite(price)) return;
+  const desc = prompt('Descripción', p.desc); if (desc === null) return;
+  const category = prompt('Categoría', p.category); if (category === null) return;
+
+  p.name = name;
+  p.price = price;
+  p.desc = desc;
+  p.category = category;
+  saveSettingsEverywhere();
+  renderCategories();
+  renderMenu();
+  renderAdmin('products');
+}
+
+function addNewProduct() {
+  const name = prompt('Nombre del producto'); if (!name) return;
+  const price = Number(prompt('Precio', 0)); if (!Number.isFinite(price)) return;
+  const category = prompt('Categoría', 'Hamburguesas'); if (!category) return;
+  const desc = prompt('Descripción'); if (!desc) return;
+  const emoji = prompt('Emoji', '🍔');
+
+  settings.products.push({
+    id: Date.now(),
+    category,
+    name,
+    desc,
+    price,
+    emoji: emoji || '🍔',
+    image: '',
+    extras: [],
+    recipe: []
+  });
+
+  saveSettingsEverywhere();
+  renderCategories();
+  renderMenu();
+  renderAdmin('products');
+}
+
+function addIngredient() {
+  settings.ingredients.push({ id: `ing-${Date.now()}`, name: 'Nuevo insumo', unit: 'u', price: 0 });
+  saveSettingsEverywhere();
+  renderCostTab();
+}
+
+function saveCosts() {
+  const ingredientInputs = [...document.querySelectorAll('[data-ingredient-name]')];
+  const updatedIngredients = ingredientInputs.map((input, index) => {
+    const name = document.querySelector(`[data-ingredient-name="${index}"]`)?.value?.trim() || 'Insumo';
+    const unit = document.querySelector(`[data-ingredient-unit="${index}"]`)?.value?.trim() || 'u';
+    const price = Number(document.querySelector(`[data-ingredient-price="${index}"]`)?.value || 0);
+    return { id: String(settings.ingredients[index]?.id || `ing-${Date.now()}-${index}`), name, unit, price };
+  }).filter(item => item.name);
+
+  settings.ingredients = updatedIngredients;
+
+  const fixedCosts = {};
+  document.querySelectorAll('[data-fixed-key]').forEach(input => {
+    const key = input.dataset.fixedKey;
+    fixedCosts[key] = Number(input.value || 0);
+  });
+  settings.fixedCosts = fixedCosts;
+
+  saveSettingsEverywhere();
+  toast('Costos guardados ✓');
+  renderAdmin('costs');
+}
+
+function exportConfig() {
+  const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mora-config.json';
+  a.click();
+}
+
+function exportOrdersCsv() {
+  const orders = loadJSON(STORAGE.orders, []);
+  const rows = [
+    ['Fecha', 'Cliente', 'WhatsApp', 'Dirección', 'Tipo', 'Productos', 'Venta', 'Costo', 'Ganancia', 'Notas']
+  ];
+
+  orders.forEach(order => {
+    const customer = order.customer || {};
+    const products = (order.products || []).map(p => `${p.name} x${p.qty}`).join(' | ');
+    rows.push([
+      new Date(order.createdAt).toLocaleDateString('es-AR'),
+      customer.name || '',
+      customer.phone || '',
+      customer.address || '',
+      customer.fulfillment || '',
+      products,
+      Number(order.total || 0),
+      Number(order.cost || 0),
+      Number(order.gain || 0),
+      customer.notes || ''
+    ]);
+  });
+
+  const csv = rows.map(row => row.map(value => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mora-pedidos.csv';
+  a.click();
+  toast('CSV listo para Google Sheets');
+}
+
+function wire() {
+  document.getElementById('menuCta').onclick = () => document.getElementById('menuSection').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('cartBtn').onclick = () => document.getElementById('checkout').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('adminBtn').onclick = () => adminOpen();
+  document.getElementById('whatsapp').onclick = sendOrder;
+  document.getElementById('clearCartBtn').onclick = () => {
+    if (confirm('¿Vaciar el carrito?')) {
+      cart = [];
+      saveJSON(STORAGE.cart, cart);
+      renderCart();
+    }
+  };
+  document.getElementById('fulfillment').onchange = updateDeliveryVisibility;
+  document.getElementById('deliveryZone').onchange = renderCart;
+  document.getElementById('categoryTabs').onclick = e => {
+    const b = e.target.closest('[data-category]');
+    if (b) {
+      activeCategory = b.dataset.category;
+      renderCategories();
+      renderMenu();
+    }
+  };
+  document.getElementById('menu').onclick = e => {
+    const q = e.target.closest('[data-quick-add]');
+    const p = e.target.closest('[data-product]');
+    if (q) addProduct(Number(q.dataset.quickAdd));
+    else if (p) openProduct(Number(p.dataset.product));
+  };
+  document.getElementById('cart').onclick = e => {
+    const c = e.target.closest('[data-change]');
+    const r = e.target.closest('[data-remove]');
+    if (c) {
+      const i = cart.find(x => x.key === c.dataset.key);
+      if (i) {
+        i.qty += Number(c.dataset.change);
+        if (i.qty <= 0) cart = cart.filter(x => x.key !== c.dataset.key);
+        saveJSON(STORAGE.cart, cart);
+        renderCart();
+      }
+    }
+    if (r) {
+      cart = cart.filter(x => x.key !== r.dataset.remove);
+      saveJSON(STORAGE.cart, cart);
+      renderCart();
+    }
+  };
+  document.getElementById('modalAdd').onclick = () => {
+    const extras = [...document.querySelectorAll('#modalOptions input:checked')].map(x => selectedProduct.extras[Number(x.dataset.extraIndex)]);
+    addProduct(selectedProduct.id, extras);
+    setModal('productModal', false);
+  };
+  document.querySelectorAll('[data-close-modal]').forEach(x => x.onclick = () => setModal('productModal', false));
+  document.querySelectorAll('[data-close-admin]').forEach(x => x.onclick = () => setModal('adminModal', false));
+
+  document.querySelector('.admin-tabs').onclick = e => {
+    const b = e.target.closest('[data-admin-tab]');
+    if (b) renderAdmin(b.dataset.adminTab);
+  };
+
+  document.getElementById('adminContent').onclick = async e => {
+    if (e.target.id === 'adminLogin') {
+      try {
+        if (window.MoraCloud?.isEnabled()) {
+          adminSession = await MoraCloud.signIn(document.getElementById('adminEmail').value.trim(), document.getElementById('adminPassword').value);
+          renderAdminAuth();
+          renderAdmin('business');
+          return;
+        }
+
+        const user = document.getElementById('adminEmail')?.value || '';
+        const pass = document.getElementById('adminPassword')?.value || '';
+        if (user.trim().toLowerCase() === 'luca' && pass === 'mora 172309') {
+          saveJSON('moraLocalAdminSession', true);
+          renderAdmin('business');
+          return;
+        }
+
+        toast('Credenciales inválidas', true);
+      } catch (err) {
+        toast(String(err?.message || err), true);
+      }
+      return;
+    }
+
+    if (e.target.id === 'adminLogout') {
+      if (window.MoraCloud?.isEnabled()) {
+        await MoraCloud.signOut();
+      }
+      localStorage.removeItem('moraLocalAdminSession');
+      adminSession = null;
+      renderAdminAuth();
+      renderAdmin('login');
+      toast('Sesión cerrada');
+      return;
+    }
+
+    if (e.target.id === 'saveBusiness') {
+      settings.businessName = document.getElementById('aName').value.trim() || settings.businessName;
+      settings.whatsappNumber = document.getElementById('aWhatsApp').value.trim() || settings.whatsappNumber;
+      saveSettingsEverywhere();
+      toast('Negocio actualizado ✓');
+      renderAdmin('business');
+      return;
+    }
+
+    if (e.target.id === 'addProduct') addNewProduct();
+    if (e.target.id === 'exportConfig') exportConfig();
+    if (e.target.id === 'addIngredient') addIngredient();
+    if (e.target.id === 'saveCosts') saveCosts();
+    if (e.target.id === 'exportCsv') exportOrdersCsv();
+    if (e.target.dataset.editProduct) editProduct(Number(e.target.dataset.editProduct));
+    if (e.target.dataset.deleteProduct) {
+      settings.products = settings.products.filter(p => p.id !== Number(e.target.dataset.deleteProduct));
+      saveSettingsEverywhere();
+      renderCategories();
+      renderMenu();
+      renderAdmin('products');
+    }
+    if (e.target.id === 'addZone') {
+      settings.deliveryZones.push({ id: 'z' + Date.now(), name: 'Nueva zona', price: 0 });
+      renderAdmin('zones');
+    }
+    if (e.target.id === 'saveZones') {
+      settings.deliveryZones = settings.deliveryZones.map((z, i) => ({
+        ...z,
+        name: document.querySelector(`[data-zone-name="${i}"]`)?.value?.trim() || z.name,
+        price: Number(document.querySelector(`[data-zone-name="${i}"]`)?.value || 0)
+      }));
+      saveSettingsEverywhere();
+      renderAdmin('zones');
+    }
+    if (e.target.dataset.deleteZone) {
+      settings.deliveryZones.splice(Number(e.target.dataset.deleteZone), 1);
+      renderAdmin('zones');
+    }
+    if (e.target.id === 'clearOrders') {
+      if (confirm('¿Borrar todo el historial local?')) {
+        localStorage.removeItem(STORAGE.orders);
+        renderAdmin('orders');
+      }
+    }
+  };
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  document.title = `${settings.businessName} — Pedidos Online`;
+  wire();
+  renderCategories();
+  renderMenu();
+  renderFormOptions();
+  renderCart();
+  await hydrateFromCloud();
+  document.title = `${settings.businessName} — Pedidos Online`;
+});
