@@ -5,8 +5,7 @@
 
   function readSession() {
     try {
-      const value = localStorage.getItem(SESSION_KEY);
-      return value === 'true';
+      return localStorage.getItem(SESSION_KEY) === 'true';
     } catch (error) {
       return false;
     }
@@ -23,7 +22,6 @@
   function updateAdminButton() {
     const button = document.getElementById('adminBtn');
     if (!button) return;
-
     const isLogged = readSession();
     button.hidden = !isLogged;
     button.style.display = isLogged ? '' : 'none';
@@ -76,6 +74,10 @@
         window.toast('Sesión de admin activada ✓');
       }
 
+      if (typeof window.setModal === 'function') {
+        window.setModal('adminModal', true);
+      }
+
       return true;
     }
 
@@ -110,11 +112,9 @@
         openAdminLogin();
         return;
       }
-
       if (typeof originalAdminOpen === 'function') {
         return originalAdminOpen.call(this, tab);
       }
-
       if (typeof window.setModal === 'function') {
         window.setModal('adminModal', true);
       }
@@ -133,7 +133,6 @@
         }
         return;
       }
-
       if (typeof originalRenderAdminAuth === 'function') {
         return originalRenderAdminAuth.call(this);
       }
@@ -149,31 +148,27 @@
         }
         return;
       }
-
       if (typeof originalRenderAdmin === 'function') {
         return originalRenderAdmin.call(this, tab);
       }
     };
 
-    const content = document.getElementById('adminContent');
-    if (content) {
-      content.onclick = (event) => {
-        const loginButton = event.target.closest('#adminLogin');
-        const logoutButton = event.target.closest('#adminLogout');
+    document.addEventListener('click', (event) => {
+      const loginButton = event.target.closest('#adminLogin');
+      const logoutButton = event.target.closest('#adminLogout');
 
-        if (loginButton) {
-          event.preventDefault();
-          loginLocalAdmin();
-          return;
-        }
+      if (loginButton) {
+        event.preventDefault();
+        loginLocalAdmin();
+        return;
+      }
 
-        if (logoutButton) {
-          event.preventDefault();
-          logoutLocalAdmin();
-          return;
-        }
-      };
-    }
+      if (logoutButton) {
+        event.preventDefault();
+        logoutLocalAdmin();
+        return;
+      }
+    });
 
     const button = document.getElementById('adminBtn');
     if (button) {
